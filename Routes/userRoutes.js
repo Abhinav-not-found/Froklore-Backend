@@ -2,6 +2,7 @@ const express = require('express')
 const Model = require('../Models/userModel')
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 //REGISTER
@@ -55,6 +56,30 @@ router.post('/login',async(req,res)=>{
         res.status(500).json({message:"Internal Server Issue"})
     }
 })
+
+//CheckUserValidity
+router.post('/checkUserValidity',async(req,res)=>{
+    try {
+        const {userId} = req.body
+        console.log('Recieved userId:',userId)
+
+        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ message: 'Invalid UserId' });
+        }
+
+        const checkUser = await Model.findById(userId)
+        if(checkUser){
+            res.status(200).json({message:'User Found',checkUser:checkUser})
+        }
+        else{
+            res.status(404).json({message:'User not Found'})
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:"Internal Server Issue"})
+    }
+})
+
 
 
 module.exports = router 

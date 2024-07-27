@@ -20,6 +20,10 @@ const createRecipeSchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    userId:{
+        type:String,
+        required:true,
+    },
 })
 const create = mongoose.model('Create-Recipe',createRecipeSchema)
 module.exports = create

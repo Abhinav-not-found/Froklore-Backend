@@ -27,6 +27,9 @@ app.use('/',userRouter)
 const profileInfoRoute = require('./Routes/profileInfoRoute')
 app.use('/',profileInfoRoute)
 
+const createRecipeRoute = require('./Routes/createRecipeRoute')
+app.use('/',createRecipeRoute)
+
 
 
 
