@@ -56,10 +56,19 @@ router.get('/recipe/:id',async(req,res)=>{
         const recipeId = req.params.id
         const recipe = await Model.findById(recipeId)
         if(recipe){
-            res.status(200).json(recipe)
+            const userIdInsideRecipe = recipe.userId
+            console.log(userIdInsideRecipe)
+            // res.status(200).json(recipe)
+            const userInfo = await userModel.findById(userIdInsideRecipe)
+            if(userInfo){
+                res.status(200).json({userInfo,recipe})
+            }
+            else{
+                res.status(404).json('Nothing Found')
+            }
         }
         else{
-            res.status(404).send('Not Found')
+            res.status(404).send('Recipe Not Found')
         }
     } catch (error) {
         res.status(500).json({message:'Internal Server Error',error})
@@ -83,5 +92,18 @@ router.get('/recipe/:id', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Issue' });
     }
 });
+
+
+//Delete Recipe
+router.delete('/delete/:id',async(req,res)=>{
+    try {
+        const id = req.params.id
+        const deleteRecipe = await Model.findByIdAndDelete(id)
+        res.status(200).send('Deleted Successfully')
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Issue' });
+    }
+})
 
 module.exports = router

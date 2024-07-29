@@ -10,7 +10,8 @@ const createRecipeSchema = mongoose.Schema({
     },
     image:{
         type:String,
-        required:true,
+        required:false,
+        default:''
     },
     ingredients:{
         type:String,
@@ -24,6 +25,15 @@ const createRecipeSchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    createdAt:{
+        type:String,
+        required:true,
+        default: () => {
+            const date = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('en-GB', options);
+        }
+    }
 })
 const create = mongoose.model('Create-Recipe',createRecipeSchema)
 module.exports = create

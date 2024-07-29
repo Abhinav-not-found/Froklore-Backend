@@ -30,7 +30,8 @@ app.use('/',profileInfoRoute)
 const createRecipeRoute = require('./Routes/createRecipeRoute')
 app.use('/',createRecipeRoute)
 
-
+const likeRoute = require('./Routes/likeRoute')
+app.use('/',likeRoute)
 
 
 

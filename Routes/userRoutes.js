@@ -80,6 +80,17 @@ router.post('/checkUserValidity',async(req,res)=>{
     }
 })
 
-
+//getUserInfo
+router.get('/getUserInfo/:id',async(req,res)=>{
+    try {
+        const userId = req.params.id
+        // console.log(userId)
+        const findUser = await Model.findById(userId)
+        res.status(200).json({findUser})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:"Internal Server Issue"})
+    }
+})
 
 module.exports = router 
