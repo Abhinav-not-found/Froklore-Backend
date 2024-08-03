@@ -106,4 +106,38 @@ router.delete('/delete/:id',async(req,res)=>{
     }
 })
 
+
+//getSuggestions
+router.get('/getSuggestion/:id',async(req,res)=>{
+    try {
+        const userId = req.params.id
+        const recipeById = await Model.find({userId:userId})
+        if(recipeById){
+            res.status(200).json({recipeById})
+        }
+        else{
+            res.status(404).send('Not found')
+        }
+    } catch (error) {
+        res.status(500).json({message:'Internal Server Error',error})
+    }
+})
+
+//updateRecipe
+router.patch('/updateRecipe/:recipeId',async(req,res)=>{
+    try {
+        const recipeId = req.params.recipeId
+        const {title,shortDesc,image,ingredients,recipe}=req.body
+        const findRecipe = await Model.findByIdAndUpdate(recipeId,{title,shortDesc,image,ingredients,recipe},{new:true})
+        if(findRecipe){
+            res.status(200).json({message:'Updated',findRecipe:findRecipe})
+        }
+        else{   
+            res.status(404).send('Not found')
+        }
+    } catch (error) {
+        res.status(500).json({message:'Internal Server Error',error})
+        console.log(error)
+    }
+})
 module.exports = router

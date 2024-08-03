@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const LikeModel = require('../models/likeModel'); // Ensure the correct path
+const LikeModel = require('../Models/likeModel'); // Ensure the correct path
 
 // Add a like
 router.put('/like', async (req, res) => {
