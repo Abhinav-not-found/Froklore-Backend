@@ -140,4 +140,23 @@ router.patch('/updateRecipe/:recipeId',async(req,res)=>{
         console.log(error)
     }
 })
+
+
+
+//getInfoUserId - profilePage
+router.get('/getInfoUserId/:id',async(req,res)=>{
+    try {
+        const userId = req.params.id
+        const getRecipe = await Model.find({userId})
+        if(getRecipe.length > 0){
+            res.status(200).json({getRecipe})
+        }
+        else {
+            res.status(404).json({ message: 'No recipes found for this user' });
+        }
+    } catch (error) {
+        res.status(500).json({message:'Internal Server Error',error})
+        console.log(error)
+    }
+})
 module.exports = router
