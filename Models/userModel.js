@@ -13,7 +13,12 @@ const userSchema = mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    // profilePic: { 
+    //     type: String,
+    //     default: null,
+    //     required:false
+    // }
 })
 const users = mongoose.model('user',userSchema)
 module.exports = users

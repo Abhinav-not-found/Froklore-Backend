@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path');
 const app = express()
 require('dotenv').config()
 require('colors')
@@ -16,6 +17,7 @@ app.use(express.json())
 
 const Multer = require('./Multer')
 app.use('/',Multer)
+app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
 
 
 app.get('/',(req,res)=>{

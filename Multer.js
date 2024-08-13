@@ -1,7 +1,7 @@
-// uploadRoutes.js
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const router = express.Router();
 
@@ -9,7 +9,11 @@ const router = express.Router();
 const storage = multer.diskStorage({
     destination: './Uploads/', // Set upload folder
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
+        const userId = req.body.userId; // Get userId from request body
+        if (!userId) {
+            return cb(new Error('No userId provided'));
+        }
+        cb(null, `${userId}-${Date.now()}-${file.originalname}`);
     }
 });
 
@@ -37,16 +41,27 @@ function checkFileType(file, cb) {
 
 // Handle file upload
 router.post('/upload', (req, res) => {
+    console.log('userId: ',req.body.userId)
     upload(req, res, (err) => {
         if (err) {
-            res.status(400).send(err);
-        } else {
-            if (req.file == undefined) {
-                res.status(400).send('No file selected!');
-            } else {
-                res.status(200).send(`File uploaded! ${req.file.path}`);
-            }
+            return res.status(400).send(err.message);
         }
+        if (!req.file) {
+            return res.status(400).send('No file selected!');
+        }
+
+        const userId = req.body.userId;  // Get userId from the request body
+        const originalFilename = req.file.originalname;
+        const filename = `${userId}-${Date.now()}-${originalFilename}`;
+
+        // Move the file to the correct path with the new filename
+        const newPath = path.join(__dirname, 'Uploads', filename);
+        fs.rename(req.file.path, newPath, (err) => {
+            if (err) {
+                return res.status(500).send('Error saving file');
+            }
+            res.status(200).send({ filePath: `Uploads/${filename}` });
+        });
     });
 });
 
