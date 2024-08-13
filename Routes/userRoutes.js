@@ -1,7 +1,7 @@
 const express = require('express');
 const Model = require('../Models/userModel');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');  // Changed from bcrypt to bcryptjs
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
         if (existingUsername) {
             return res.status(400).send('Username Already Used');
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);  // Using bcryptjs to hash password
         const newUser = new Model({ email, password: hashedPassword, username });
         const saveUser = await newUser.save();
         res.status(200).json({ message: 'User Created Successfully', saveUser });
@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
         if (!userFind) {
             return res.status(401).send('User Not Found!!!');
         }
-        const passwordVerify = await bcrypt.compare(password, userFind.password);
+        const passwordVerify = await bcrypt.compare(password, userFind.password);  // Using bcryptjs to compare password
         if (!passwordVerify) {
             return res.status(500).send('Incorrect Password');
         }
